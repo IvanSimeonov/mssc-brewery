@@ -3,6 +3,7 @@ package ivansimeonov.springframework.msscbrewery.web.controller;
 import ivansimeonov.springframework.msscbrewery.services.CustomerService;
 import ivansimeonov.springframework.msscbrewery.web.model.CustomerDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,9 @@ public class CustomerController {
     @PostMapping
     public ResponseEntity<CustomerDto> addCustomer(@RequestBody CustomerDto customerDto) {
         CustomerDto savedCustomer = this.customerService.addNewCustomer(customerDto);
-        return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/api/v1/customer" + savedCustomer.getCustomerId());
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     @PutMapping("/{customerId}")
